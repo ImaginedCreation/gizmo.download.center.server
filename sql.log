@@ -1,0 +1,52 @@
+
+2024/08/17 12:41:01 [32mE:/golang_code/src/gizmo_download_center_server/modules.go:147
+[0m[33m[9.175ms] [34;1m[rows:-][0m SELECT DATABASE()
+
+2024/08/17 12:41:01 [32mE:/golang_code/src/gizmo_download_center_server/modules.go:147
+[0m[33m[19.584ms] [34;1m[rows:1][0m SELECT SCHEMA_NAME from Information_schema.SCHEMATA where SCHEMA_NAME LIKE 'gizmo%' ORDER BY SCHEMA_NAME='gizmo' DESC,SCHEMA_NAME limit 1
+
+2024/08/17 12:41:01 [32mE:/golang_code/src/gizmo_download_center_server/modules.go:147
+[0m[33m[17.774ms] [34;1m[rows:-][0m SELECT count(*) FROM information_schema.tables WHERE table_schema = 'gizmo' AND table_name = 't_user' AND table_type = 'BASE TABLE'
+
+2024/08/17 12:41:01 [32mE:/golang_code/src/gizmo_download_center_server/modules.go:147
+[0m[33m[9.264ms] [34;1m[rows:-][0m SELECT DATABASE()
+
+2024/08/17 12:41:01 [32mE:/golang_code/src/gizmo_download_center_server/modules.go:147
+[0m[33m[19.467ms] [34;1m[rows:1][0m SELECT SCHEMA_NAME from Information_schema.SCHEMATA where SCHEMA_NAME LIKE 'gizmo%' ORDER BY SCHEMA_NAME='gizmo' DESC,SCHEMA_NAME limit 1
+
+2024/08/17 12:41:01 [32mE:/golang_code/src/gizmo_download_center_server/modules.go:147
+[0m[33m[17.916ms] [34;1m[rows:-][0m SELECT * FROM `t_user` LIMIT 1
+
+2024/08/17 12:41:01 [32mE:/golang_code/src/gizmo_download_center_server/modules.go:147
+[0m[33m[19.326ms] [34;1m[rows:-][0m SELECT column_name, column_default, is_nullable = 'YES', data_type, character_maximum_length, column_type, column_key, extra, column_comment, numeric_precision, numeric_scale , datetime_precision FROM information_schema.columns WHERE table_schema = 'gizmo' AND table_name = 't_user' ORDER BY ORDINAL_POSITION
+
+2024/08/17 12:41:01 [32m
+[0m[33m[9.075ms] [34;1m[rows:-][0m SELECT DATABASE()
+
+2024/08/17 12:41:01 [32m
+[0m[33m[19.988ms] [34;1m[rows:1][0m SELECT SCHEMA_NAME from Information_schema.SCHEMATA where SCHEMA_NAME LIKE 'gizmo%' ORDER BY SCHEMA_NAME='gizmo' DESC,SCHEMA_NAME limit 1
+
+2024/08/17 12:41:01 [32mE:/golang_code/src/gizmo_download_center_server/modules.go:147
+[0m[33m[19.583ms] [34;1m[rows:2][0m 
+SELECT
+	TABLE_NAME,
+	COLUMN_NAME,
+	INDEX_NAME,
+	NON_UNIQUE 
+FROM
+	information_schema.STATISTICS 
+WHERE
+	TABLE_SCHEMA = 'gizmo' 
+	AND TABLE_NAME = 't_user' 
+ORDER BY
+	INDEX_NAME,
+	SEQ_IN_INDEX
+
+2024/08/17 12:41:01 [32m
+[0m[33m[8.413ms] [34;1m[rows:-][0m SELECT DATABASE()
+
+2024/08/17 12:41:01 [32m
+[0m[33m[18.896ms] [34;1m[rows:1][0m SELECT SCHEMA_NAME from Information_schema.SCHEMATA where SCHEMA_NAME LIKE 'gizmo%' ORDER BY SCHEMA_NAME='gizmo' DESC,SCHEMA_NAME limit 1
+
+2024/08/17 12:41:01 [32m
+[0m[33m[17.487ms] [34;1m[rows:-][0m SELECT count(*) FROM INFORMATION_SCHEMA.table_constraints WHERE constraint_schema = 'gizmo' AND table_name = 't_user' AND constraint_name = 'uni_t_user_user_name'

@@ -17,13 +17,15 @@ func main() {
 		gin.SetMode(gin.ReleaseMode)
 	}
 
+	OnLoad()
+
 	router := gin.New()
 
 	UseController(router)
 
-	fmt.Printf("run server successful. please access http://127.0.0.1:%s\n", GlobalConfig.PORT)
+	fmt.Printf("run server successful. please access http://127.0.0.1:%s\n", G_CONFIG.PORT)
 
-	if err := router.Run(fmt.Sprintf(":%s", GlobalConfig.PORT)); err != nil {
+	if err := router.Run(fmt.Sprintf(":%s", G_CONFIG.PORT)); err != nil {
 		fmt.Printf("failed to start server:%v\n", err)
 		return
 	}

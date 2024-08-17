@@ -1,0 +1,17 @@
+package main
+
+var G_CONFIG = CONFIG{
+	PORT: "9061",
+	SQL: SQL{
+		IP:        "192.168.1.6",
+		PORT:      "3306",
+		USER:      "public",
+		PASS:      "public",
+		DATABASE:  "public",
+		IDLE:      10,
+		OPENCOUNT: 100,
+		LIFETIME:  1,
+	},
+}
+
+var G_SECRET = ""
