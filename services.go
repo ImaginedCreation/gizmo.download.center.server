@@ -9,6 +9,10 @@ import (
 	"gorm.io/gorm"
 )
 
+func FirstUserInfo(p *FirstUserInfo_P, user *USER, c *context.Context) error {
+	return NewDBClient(c).Where(&USER{UserName: p.UserName}).First(&user).Error
+}
+
 func Register(p *Register_P, c *context.Context) error {
 	if err := NewDBClient(c).Where(&USER{UserName: p.UserName}).First(&USER{}).Error; err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {

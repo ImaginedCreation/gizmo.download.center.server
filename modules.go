@@ -5,8 +5,10 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"strings"
 	"time"
 
+	"github.com/gin-gonic/gin"
 	"github.com/go-playground/validator/v10"
 	"github.com/golang-jwt/jwt/v5"
 	"gorm.io/driver/mysql"
@@ -18,6 +20,7 @@ import (
 const (
 	RESCODEOK    RESCODE = 200
 	RESCODEERROR RESCODE = 500
+	RESAUTHERROR RESCODE = 401
 )
 
 type RES[T any] struct {
@@ -60,9 +63,46 @@ type Token struct {
 	VERSION  string `json:"version"`
 }
 
+type PutUserInfo_P struct {
+	NickName string `json:"nick_name" binding:"required"`
+}
+
 type Claims struct {
 	Token
 	jwt.RegisteredClaims
+}
+
+type FirstUserInfo_P struct {
+	UserName string `json:"username" binding:"required"`
+}
+
+func AUTHMIDDLEWARE() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		t_s := c.Request.Header.Get("Authorization")
+		t_arr := strings.Split(t_s, "Bearer ")
+		if t_s == "" || len(t_arr) != 2 {
+			c.JSON(int(RESAUTHERROR), RES_AUTH_FN())
+			c.Abort()
+			return
+		}
+
+		claims, err := ParseTokenStr(t_arr[len(t_arr)-1])
+		if err != nil {
+			c.JSON(int(RESAUTHERROR), RES_AUTH_FN())
+			c.Abort()
+			return
+		}
+		var user USER
+		cx := c.Request.Context()
+		if err := NewDBClient(&cx).Where(&USER{UserName: claims.Token.USERNAME, Version: claims.Token.VERSION}).First(&user).Error; err != nil {
+			c.JSON(int(RESAUTHERROR), RES_AUTH_FN())
+			c.Abort()
+			return
+		}
+
+		c.Set("username", user.UserName)
+		c.Next()
+	}
 }
 
 func GenerateToken(p *Token) (string, error) {
@@ -83,6 +123,20 @@ func GenerateToken(p *Token) (string, error) {
 		return "", err
 	}
 	return t_s, nil
+}
+
+func ParseTokenStr(token_s string) (Claims, error) {
+	token, err := jwt.ParseWithClaims(token_s, &Claims{}, func(t *jwt.Token) (interface{}, error) {
+		return []byte(G_SECRET), nil
+	})
+	if err != nil {
+		return Claims{}, err
+	}
+	claims, ok := token.Claims.(*Claims)
+	if !ok && token.Valid {
+		return Claims{}, err
+	}
+	return *claims, nil
 }
 
 func OnLoad() {
@@ -165,6 +219,14 @@ func ParseValidatorError(err error) string {
 }
 
 type RESCODE int
+
+func RES_AUTH_FN() RES[string] {
+	return RES[string]{
+		Code:    RESAUTHERROR,
+		Message: "authorization expires",
+		Data:    "",
+	}
+}
 
 func RES_OK_FN[T any](data T) RES[T] {
 	return RES[T]{
